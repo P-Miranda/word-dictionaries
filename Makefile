@@ -1,4 +1,4 @@
-DICT:=eng-word.txt
+DICT:=test-dic.txt
 
 EXEC:=dict
 
