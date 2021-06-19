@@ -9,6 +9,53 @@ Main function for dictionary program.
 
 #define MAX_LINE 50
 
+/* Read file and count instances of words for each size
+ * Returns: counter array
+*/
+int* count_lines(char* filename, int max_line){
+
+	FILE* fp = fopen(filename, "r");
+	/* Check for valid inputs */
+	if(fp==NULL || max_line <= 0){
+		fprintf(stderr, "Invalid count_line inputs: fp=%p\tMaxLine=%d\n", (void*)fp, max_line);
+		return NULL;
+	}
+	/* Allocate counter array */
+	int * word_counter = (int*) malloc(max_line*sizeof(int));
+	if(word_counter==NULL){
+		fprintf(stderr, "Failed to allocate counter array\n");
+		return word_counter;
+	}
+	char line[MAX_LINE] = {0};
+	int nchars = 0;
+	/* Read file to count words */
+	while(fgets(line, MAX_LINE, fp) != NULL){
+		nchars = strlen(line)-1;
+		word_counter[nchars-1]++;
+	}
+	/* close file */
+	fclose(fp);
+
+	return word_counter;
+}
+
+/* Print dictionary status */
+void print_dict_status(int* word_counter, int max_len){
+	if(word_counter == NULL || max_len <= 0){
+		fprintf(stderr, "Invalid counter pointer or length\n");
+		return;
+	}
+	int i=0, total_words=0;
+	printf("Dictionary Status:\n");
+	for(i=0; i<MAX_LINE;i++) {
+		if(word_counter[i]){
+			printf("%d word(s) of size %d\n", word_counter[i], i+1);
+			total_words+=word_counter[i];
+		}
+	}
+	printf("Total of %d word(s)\n", total_words);
+	return;
+}
 int main(int argc, char** argv){
 
 	printf("Word Dictionary Program\n");
@@ -18,39 +65,18 @@ int main(int argc, char** argv){
 		printf("Too few arguments.\n\nUsage: %s <dictionary_data.txt>\n", argv[0]);
 	}
 
-	FILE* fp_dict = NULL;
-
-	/*Open dict file*/
-	fp_dict = fopen(argv[1], "r");
-	if(fp_dict == NULL){
-		printf("Failed to load dictionary file %s\n", argv[1]);
+	/* Read file to get word count of each size */
+	int* word_counter = count_lines(argv[1], MAX_LINE);
+	if(word_counter == NULL){
+		fprintf(stderr, "Invalid word_counter... exiting\n");
 		return -1;
 	}
 
-	/* Read lines */
-	char line[MAX_LINE] = {0}; 
-	int lnum=0, nchars = 0;
-	int len_counter[MAX_LINE] = {0}; /* count #Words for each length */
+	print_dict_status(word_counter, MAX_LINE);
 
-	while(fgets(line, MAX_LINE, fp_dict) != NULL){
-		nchars = strlen(line)-1;
-		line[nchars] = 0;
-		printf("Line %d: %s\t%d chars\n", lnum, line, nchars);
-		lnum++;
-		len_counter[nchars-1]++;
-	}
-
-	int i=0;
-	printf("Dict Stats:\n");
-	for(i=0; i<MAX_LINE;i++){
-		if(len_counter[i]){
-			printf("%d words of size %d\n", len_counter[i], i+1);
-		}
-	}
+	/* Free memory */
+	free(word_counter);
 
 
-
-	/* close file */
-	fclose(fp_dict);
 	return EXIT_SUCCESS;
 }

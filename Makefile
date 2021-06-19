@@ -1,4 +1,5 @@
-DICT:=test-dic.txt
+DICT?=/usr/share/dict/words
+DICT?=test-dic.txt
 
 EXEC:=dict
 

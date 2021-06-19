@@ -3,10 +3,10 @@ Repository for doing random things with language word dictionaries
 
 # Data
 - [English Word List](https://github.com/dwyl/english-words)
+- You can also use the linux dictionaries in `/usr/share/dict/` or `/usr/dict/`
+	- [Source](https://en.wikipedia.org/wiki/Words_(Unix))
 
 # TODO List:
-- Open file
-- Count #words for each size
 - Read all words
 - Do cool things with them:
 	- Statistics
