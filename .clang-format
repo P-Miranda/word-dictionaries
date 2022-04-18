@@ -1,0 +1,34 @@
+---
+# Use LLVM Defaults
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+IndentCaseLabels: true
+ColumnLimit: 100
+---
+# Don't format These languages
+Language: CSharp
+DisableFormat: true
+---
+Language: Java
+DisableFormat: true
+---
+Language: JavaScript
+DisableFormat: true
+---
+Language: Json
+DisableFormat: true
+---
+Language: ObjC
+DisableFormat: true
+---
+Language: Proto
+DisableFormat: true
+---
+Language: TableGen
+DisableFormat: true
+---
+Language: TextProto
+DisableFormat: true
+...
+
