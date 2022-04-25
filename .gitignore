@@ -1,0 +1,3 @@
+# Top level files
+.ccache/*
+compile_commands.json
