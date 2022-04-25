@@ -17,4 +17,10 @@ all: $(SRC) $(HRD)
 clean:
 	rm *~ $(EXEC) *.tmp
 
+format:
+	@./ci/format_run.sh
+
+ci-format:
+	@./ci/format_check.sh
+
 phony: clean
