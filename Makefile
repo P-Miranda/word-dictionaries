@@ -24,6 +24,13 @@ format:
 ci-format:
 	@./ci/format_check.sh
 
+ci-lint:
+	@./ci/linter_check.sh
+
+ci-full:
+	make ci-format
+	make ci-lint
+
 clean:
 	rm -rf *~ $(EXEC) *.tmp
 
