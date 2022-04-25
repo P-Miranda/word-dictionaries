@@ -1,10 +1,11 @@
-DICT?=/usr/share/dict/words
-DICT?=test-dic.txt
+DICT?=data/test-dic.txt
 
 EXEC:=dict
 
-SRC:=$(wildcard *.c)
-HDR:=$(wildcard *.h)
+SRC_DIR=src
+
+SRC:=$(wildcard $(SRC_DIR)/*.c)
+HDR:=$(wildcard $(SRC_DIR)/*.h)
 
 FLAGS:=-Wall -Wpedantic
 CC:=gcc
