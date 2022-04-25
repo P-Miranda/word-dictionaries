@@ -77,19 +77,5 @@ int main(int argc, char **argv) {
     /* Free memory */
     free(word_counter);
 
-    int status = 0;
-
-    switch (status) {
-        case 0:
-            printf("case 0\n");
-            break;
-        case 1:
-            printf("case 1\n");
-            break;
-        default:
-            printf("default case\n");
-            break;
-    }
-
     return EXIT_SUCCESS;
 }
