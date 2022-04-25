@@ -7,8 +7,14 @@
 #
 
 # clang-format check
-git ls-files src/*.c src/*.h \
-    | xargs clang-format -style=file -fallback-style=none -dry-run -Werror
+if ! command -v clang-format &> /dev/null
+then
+    echo "Error: clang-format is not installed"
+    exit 1
+else
+    git ls-files src/*.c src/*.h \
+        | xargs clang-format -style=file -fallback-style=none -dry-run -Werror
+fi
 
 if [ $? -eq 0 ]
 then
