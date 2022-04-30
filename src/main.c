@@ -21,7 +21,7 @@ int *count_lines(char *filename, int max_line) {
         return NULL;
     }
     /* Allocate counter array */
-    int *word_counter = (int *)malloc(max_line * sizeof(int));
+    int *word_counter = (int *)calloc(max_line, sizeof(int));
     if (word_counter == NULL) {
         fprintf(stderr, "Failed to allocate counter array\n");
         return word_counter;
