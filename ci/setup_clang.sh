@@ -9,33 +9,41 @@
 
 # Check for sudo permissions
 if ! [ $(id -u) = 0 ];
-then 
+then
     echo "The script needs to run as root to allow program installation."
     echo "Usage: sudo ./setup_clang.sh"
     exit 1
 fi
 
 CLANG_VERSION="14"
-CLANG_TOOLS="clang-$CLANG_VERSION clang-tidy-$CLANG_VERSION clang-format-$CLANG_VERSION"
+CLANG_TOOLS="clang clang-tidy clang-format"
+
 # Set DISTRIB_CODENAME variable to identify current Ubuntu version
 DISTRIB_CODENAME=$(lsb_release -cs)
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo add-apt-repository -y "deb http://apt.llvm.org/${DISTRIB_CODENAME}/ llvm-toolchain-${DISTRIB_CODENAME}-$CLANG_VERSION main"
-sudo apt update
-sudo apt install -y $CLANG_TOOLS
+
+# Install and set installed version as default value
+for tool in $CLANG_TOOLS
+do
+    tool_version=$tool-$CLANG_VERSION
+    sudo apt install -y $tool_version
+    sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/$tool_version 100
+done
 
 # check clang tools
 for tool in $CLANG_TOOLS
 do
-    if ! command -v $tool &> /dev/null
+    tool_version=$($tool --version | grep "version" | awk '{print $3}' | awk -F'.' '{print $1}')
+    if [[ "$tool_version" != "$CLANG_VERSION" ]]
     then
-        echo "Error: $tool is not installed"
+        echo "Error: Failed to setup $tool-$CLANG_VERSION"
         exit 1
     else
-        echo "$tool installed"
+        echo "$tool setup"
     fi
 done
 
-echo "All clang tools installed"
+echo "All clang tools installed and setup"
 exit 0
