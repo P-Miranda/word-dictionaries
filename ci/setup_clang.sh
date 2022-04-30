@@ -41,6 +41,7 @@ do
     tool_version=$($tool --version | grep "version" | awk '{print $3}' | awk -F'.' '{print $1}')
     if [[ "$tool_version" != "$CLANG_VERSION" ]]
     then
+        echo "Error: $($tool --version)"
         echo "Error: Failed to setup $tool-$CLANG_VERSION"
         exit 1
     else
