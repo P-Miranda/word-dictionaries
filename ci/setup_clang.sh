@@ -32,13 +32,13 @@ do
     # set installed version as default 
     # (taken from github.com/vim/vim repository, ci.yml workflow)
     sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/$tool_version 100
-    sudo update-alternatives --set $tool /usr/bin/$tool_version
+    # sudo update-alternatives --set $tool /usr/bin/$tool_version
 done
 
 # check clang tools
 for tool in $CLANG_TOOLS
 do
-    tool_version=$($tool --version | grep "version" | awk '{print $3}' | awk -F'.' '{print $1}')
+    tool_version=$($tool --version | grep "version" | sed -n -e 's/^.*version //p' | awk -F'.' '{print $1}')
     if [[ "$tool_version" != "$CLANG_VERSION" ]]
     then
         echo "Error: $($tool --version)"
