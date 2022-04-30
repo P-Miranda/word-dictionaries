@@ -29,7 +29,10 @@ for tool in $CLANG_TOOLS
 do
     tool_version=$tool-$CLANG_VERSION
     sudo apt install -y $tool_version
+    # set installed version as default 
+    # (taken from github.com/vim/vim repository, ci.yml workflow)
     sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/$tool_version 100
+    sudo update-alternatives --set $tool /usr/bin/$tool_version
 done
 
 # check clang tools
