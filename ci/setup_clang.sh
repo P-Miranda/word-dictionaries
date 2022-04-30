@@ -16,7 +16,7 @@ then
 fi
 
 CLANG_VERSION="14"
-CLANG_TOOLS="clang-$VERSION clang-tidy-$VERSION clang-format-$VERSION"
+CLANG_TOOLS="clang-$CLANG_VERSION clang-tidy-$CLANG_VERSION clang-format-$CLANG_VERSION"
 # Set DISTRIB_CODENAME variable to identify current Ubuntu version
 DISTRIB_CODENAME=$(lsb_release -cs)
 
