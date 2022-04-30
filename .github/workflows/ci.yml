@@ -17,6 +17,6 @@ jobs:
       - name: format
         run: ./ci/format_check.sh
       - name: lint
-        run: ./ci/lint_check.sh
+        run: ./ci/linter_check.sh
       - name: test
         run: make test
