@@ -55,8 +55,8 @@ if ! command -v run-clang-tidy &> /dev/null
 then
     echo "Adding run-clang-tidy to PATH"
     # create symlink to run-clang-tidy-VERSION
-    $run_clang_tidy_version=run-clang-tidy-$CLANG_VERSION
-    $run_clang_tidy_default=$(which $run_clang_tidy_version | sed -n -e 's/-$CLANG_VERSION//p')
+    run_clang_tidy_version=run-clang-tidy-$CLANG_VERSION
+    run_clang_tidy_default=$(which $run_clang_tidy_version | sed -n -e 's/-$CLANG_VERSION//p')
     ln -s $(which $run_clang_tidy_version) $run_clang_tidy_default
 fi
 
