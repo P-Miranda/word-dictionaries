@@ -3,7 +3,8 @@ name: ci
 on:
   push:
     branches: [ master ]
-  pull_requests:
+  pull_request:
+    branches: '*'
 
 jobs:
   ci:
