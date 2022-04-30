@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: [ master ]
+  pull_requests:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup
+        run: sudo ./ci/setup_clang.sh
+      - name: format
+        run: ./ci/format_check.sh
+      - name: lint
+        run: ./ci/lint_check.sh
+      - name: test
+        run: make test

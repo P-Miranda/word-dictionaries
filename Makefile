@@ -18,6 +18,9 @@ $(EXEC): build
 build: $(SRC) $(HRD)
 	$(CC) $(SRC) $(HDR) -o $(EXEC) $(FLAGS)
 
+test: clean-all
+	make all
+
 format:
 	@./ci/format_run.sh
 
