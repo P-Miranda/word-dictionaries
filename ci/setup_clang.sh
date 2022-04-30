@@ -9,31 +9,69 @@
 
 # Check for sudo permissions
 if ! [ $(id -u) = 0 ];
-then 
+then
     echo "The script needs to run as root to allow program installation."
     echo "Usage: sudo ./setup_clang.sh"
     exit 1
 fi
 
 CLANG_VERSION="14"
-CLANG_TOOLS="clang-$VERSION clang-tidy-$VERSION clang-format-$VERSION"
+CLANG_TOOLS="clang clang-tidy clang-format"
+OTHER_TOOLS="make bear"
+
 # Set DISTRIB_CODENAME variable to identify current Ubuntu version
 DISTRIB_CODENAME=$(lsb_release -cs)
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo add-apt-repository -y "deb http://apt.llvm.org/${DISTRIB_CODENAME}/ llvm-toolchain-${DISTRIB_CODENAME}-$CLANG_VERSION main"
-sudo apt install -y $CLANG_TOOLS
+sudo apt update
+
+# Install and set installed version as default value
+for tool in $CLANG_TOOLS
+do
+    tool_version=$tool-$CLANG_VERSION
+    sudo apt install -y $tool_version
+    # set installed version as default 
+    # (taken from github.com/vim/vim repository, ci.yml workflow)
+    sudo update-alternatives --install /usr/bin/$tool $tool /usr/bin/$tool_version 100
+    sudo update-alternatives --set $tool /usr/bin/$tool_version
+done
 
 # check clang tools
 for tool in $CLANG_TOOLS
 do
-    if ! command -v $tool &> /dev/null
+    tool_version=$($tool --version | grep "version" | sed -n -e 's/^.*version //p' | awk -F'.' '{print $1}')
+    if [[ "$tool_version" != "$CLANG_VERSION" ]]
     then
-        echo "Error: $tool is not installed"
+        echo "Error: $($tool --version)"
+        echo "Error: tool version: $tool_version"
+        echo "Error: Failed to setup $tool-$CLANG_VERSION"
         exit 1
     else
-        echo "$tool installed"
+        echo "$tool setup"
     fi
+done
 
-echo "All clang tools installed"
+# check run-clang-tidy in PATH
+if ! command -v run-clang-tidy &> /dev/null
+then
+    echo "Adding run-clang-tidy to PATH"
+    # create symlink to run-clang-tidy-VERSION
+    run_clang_tidy_version=run-clang-tidy-$CLANG_VERSION
+    run_clang_tidy_default=$(which $run_clang_tidy_version | sed -n -e "s/-$CLANG_VERSION//p")
+    ln -s $(which $run_clang_tidy_version) $run_clang_tidy_default
+fi
+
+# Check for aditional tools
+for tool in $OTHER_TOOLS
+do
+    if ! command -v $tool &> /dev/null
+    then
+        echo "$tool not found"
+        echo "Installing $tool"
+        sudo apt install -y $tool
+    fi
+done
+
+echo "All clang tools installed and setup"
 exit 0
