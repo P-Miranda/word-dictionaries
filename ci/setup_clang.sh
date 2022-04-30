@@ -22,6 +22,7 @@ DISTRIB_CODENAME=$(lsb_release -cs)
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo add-apt-repository -y "deb http://apt.llvm.org/${DISTRIB_CODENAME}/ llvm-toolchain-${DISTRIB_CODENAME}-$CLANG_VERSION main"
+sudo apt update
 sudo apt install -y $CLANG_TOOLS
 
 # check clang tools
@@ -34,6 +35,7 @@ do
     else
         echo "$tool installed"
     fi
+done
 
 echo "All clang tools installed"
 exit 0
