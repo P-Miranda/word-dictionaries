@@ -39,6 +39,6 @@ clean:
 
 clean-all: clean
 	rm -rf compile_commands.json
-	rm -rf .ccache/*
+	rm -rf .cache/*
 
 phony: clean
