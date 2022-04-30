@@ -17,12 +17,14 @@ fi
 
 CLANG_VERSION="14"
 CLANG_TOOLS="clang clang-tidy clang-format"
+OTHER_TOOLS="make bear"
 
 # Set DISTRIB_CODENAME variable to identify current Ubuntu version
 DISTRIB_CODENAME=$(lsb_release -cs)
 
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo add-apt-repository -y "deb http://apt.llvm.org/${DISTRIB_CODENAME}/ llvm-toolchain-${DISTRIB_CODENAME}-$CLANG_VERSION main"
+sudo apt update
 
 # Install and set installed version as default value
 for tool in $CLANG_TOOLS
@@ -56,9 +58,20 @@ then
     echo "Adding run-clang-tidy to PATH"
     # create symlink to run-clang-tidy-VERSION
     run_clang_tidy_version=run-clang-tidy-$CLANG_VERSION
-    run_clang_tidy_default=$(which $run_clang_tidy_version | sed -n -e 's/-$CLANG_VERSION//p')
+    run_clang_tidy_default=$(which $run_clang_tidy_version | sed -n -e "s/-$CLANG_VERSION//p")
     ln -s $(which $run_clang_tidy_version) $run_clang_tidy_default
 fi
+
+# Check for aditional tools
+for tool in $OTHER_TOOLS
+do
+    if ! command -v $tool &> /dev/null
+    then
+        echo "$tool not found"
+        echo "Installing $tool"
+        sudo apt install -y $tool
+    fi
+done
 
 echo "All clang tools installed and setup"
 exit 0
