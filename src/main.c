@@ -3,16 +3,18 @@ Main function for dictionary program.
 
 */
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 #define MAX_LINE 50
 
 /* Read file and count instances of words for each size
  * Returns: counter array
  */
-int *count_lines(char *filename, int max_line) {
+uint32_t *count_lines(char *filename, uint32_t max_line) {
 
     FILE *fp = fopen(filename, "r");
     /* Check for valid inputs */
@@ -21,13 +23,13 @@ int *count_lines(char *filename, int max_line) {
         return NULL;
     }
     /* Allocate counter array */
-    int *word_counter = (int *)calloc(max_line, sizeof(int));
+    uint32_t *word_counter = (uint32_t *)calloc(max_line, sizeof(uint32_t));
     if (word_counter == NULL) {
         fprintf(stderr, "Failed to allocate counter array\n");
         return word_counter;
     }
     char line[MAX_LINE] = {0};
-    int nchars = 0;
+    uint32_t nchars = 0;
     /* Read file to count words */
     while (fgets(line, MAX_LINE, fp) != NULL) {
         nchars = strlen(line) - 1;
@@ -40,12 +42,12 @@ int *count_lines(char *filename, int max_line) {
 }
 
 /* Print dictionary status */
-void print_dict_status(int *word_counter, int max_len) {
+void print_dict_status(uint32_t *word_counter, uint32_t max_len) {
     if (word_counter == NULL || max_len <= 0) {
         fprintf(stderr, "Invalid counter pointer or length\n");
         return;
     }
-    int i = 0, total_words = 0;
+    uint32_t i = 0, total_words = 0;
     printf("Dictionary Status:\n");
     for (i = 0; i < MAX_LINE; i++) {
         if (word_counter[i]) {
@@ -56,6 +58,7 @@ void print_dict_status(int *word_counter, int max_len) {
     printf("Total of %d word(s)\n", total_words);
     return;
 }
+
 int main(int argc, char **argv) {
 
     printf("Word Dictionary Program\n");
@@ -66,7 +69,7 @@ int main(int argc, char **argv) {
     }
 
     /* Read file to get word count of each size */
-    int *word_counter = count_lines(argv[1], MAX_LINE);
+    uint32_t *word_counter = count_lines(argv[1], MAX_LINE);
     if (word_counter == NULL) {
         fprintf(stderr, "Invalid word_counter... exiting\n");
         return -1;
